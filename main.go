@@ -80,6 +80,7 @@ func main() {
 				if e == nil {
 					continue
 				}
+				fmt.Printf("messsage %x, %v\n", e, e)
 				m := e.(*kafka.Message)
 				if m.TopicPartition.Error != nil {
 					fmt.Println("delivery failed ", m.TopicPartition.Error)

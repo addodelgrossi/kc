@@ -21,13 +21,14 @@ var active = true
 
 func init() {
 	bootstrapServers = os.Getenv("KAFKA_BOOTSTRAP_SERVERS")
-	caLocation = os.Getenv("CA_ROOT")
+	caLocation = os.Getenv("CA_CERT_LOCATION")
 	topic = os.Getenv("KAFKA_TOPIC")
 
 	userCertLocation = os.Getenv("USER_CERT_LOCATION")
 	userKeyLocation = os.Getenv("USER_KEY_LOCATION")
+	userKeyPassword = os.Getenv("USER_KEY_PASSWORD")
 
-	producerConfig := &kafka.ConfigMap{"bootstrap.servers": bootstrapServers, "security.protocol": "SSL", "ssl.ca.location": caLocation, "ssl.certificate.location": userCertLocation, "ssl.key.location": userKeyLocation}
+	producerConfig := &kafka.ConfigMap{"bootstrap.servers": bootstrapServers, "security.protocol": "SSL", "ssl.ca.location": caLocation, "ssl.certificate.location": userCertLocation, "ssl.key.location": userKeyLocation, "ssl.key.password": userKeyPassword}
 
 	var err error
 	kp, err = kafka.NewProducer(producerConfig)
@@ -36,7 +37,8 @@ func init() {
 		log.Fatal("failed to create producer - ", err)
 	}
 
-	consumerConfig := &kafka.ConfigMap{"bootstrap.servers": bootstrapServers, "security.protocol": "SSL", "ssl.ca.location": caLocation, "ssl.certificate.location": userCertLocation, "ssl.key.location": userKeyLocation, "group.id": "strimzi-tls-test-consumer-group"}
+	consumerConfig := &kafka.ConfigMap{"bootstrap.servers": bootstrapServers, "security.protocol": "SSL", "ssl.ca.location": caLocation, "ssl.certificate.location": userCertLocation, "ssl.key.location": userKeyLocation, "ssl.key.password": userKeyPassword, "group.id": "strimzi-tls-test-consumer-group"}
+
 	kc, err = kafka.NewConsumer(consumerConfig)
 
 	if err != nil {
@@ -80,7 +82,6 @@ func main() {
 				if e == nil {
 					continue
 				}
-				fmt.Printf("messsage %x, %v\n", e, e)
 				m := e.(*kafka.Message)
 				if m.TopicPartition.Error != nil {
 					fmt.Println("delivery failed ", m.TopicPartition.Error)

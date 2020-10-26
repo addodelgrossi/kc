@@ -65,10 +65,8 @@ tag:
 DIST_DIR := dist
 # PLATFORMS := linux/amd64 darwin/amd64 windows/amd64
 # LD_FLAGS := -ldflags "-X github.com/addodelgrossi/kc/cmd.Version=`cat VERSION` -X github.com/addodelgrossi/kc/cmd.BuildTime=`date -u +%Y-%m-%d_%H:%M:%S` -X github.com/addodelgrossi/kc/cmd.GitHash=`git rev-parse HEAD` "
-
-PLATFORMS := linux/amd64 windows/amd64
+PLATFORMS := linux/amd64
 LD_FLAGS := -ldflags "-X github.com/addodelgrossi/kc/cmd.Version=`cat VERSION` -X github.com/addodelgrossi/kc/cmd.BuildTime=`date -u +%Y-%m-%d_%H:%M:%S` -X github.com/addodelgrossi/kc/cmd.GitHash=`git rev-parse HEAD` "
-
 
 temp = $(subst /, ,$@)
 os = $(word 1, $(temp))
